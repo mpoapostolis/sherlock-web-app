@@ -1,17 +1,7 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import { useEffect, useState, Fragment } from "react";
-import TextField from "@material-ui/core/TextField";
-import {
-  FormGroup,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Link,
-  Paper,
-  Divider,
-} from "@material-ui/core";
+import { useState } from "react";
+const ReactTinyLink =
+  typeof window !== "undefined" && require("react-tiny-link").ReactTinyLink;
 
 const services = {
   "500px": "https://500px.com/{}",
@@ -213,46 +203,73 @@ export default function Home() {
       }
     });
   };
-
-  return (
-    <div className={styles.container}>
+  return typeof window !== undefined ? (
+    <>
       <Head>
         <title>Stalking.io</title>
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+        <script data-ad-client="ca-pub-3337605713038685" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
-      <main className={styles.main}>
-        <div className={styles.form}>
-          <TextField
-            onChange={(evt) => setUserName(evt.currentTarget.value)}
-            id="outlined-basic"
-            margin="dense"
-            label="enter username"
-            variant="outlined"
-          />
-          <Button
-            onClick={search}
-            style={{
-              marginLeft: "30px",
-            }}
-            variant="outlined"
-            color="primary"
-          >
-            Search
-          </Button>
+      </Head>
+      <header className="text-gray-700 shadow  body-font">
+        <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+          <a className="flex title-font font-medium items-center  text-gray-900 mb-4 md:mb-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <span className="ml-3 text-xl">Sherlock.io</span>
+          </a>
         </div>
-        <br />
-        <List style={{ width: "100%" }}>
-          {state.map((v) => (
-            <Fragment key={v}>
-              <ListItem component={Link} href={v} target="_black">
-                <ListItemText primary={v} />
-              </ListItem>
-              <Divider />
-            </Fragment>
-          ))}
-        </List>
+      </header>
+
+      <main className="flex">
+        <div className="container mx-auto">
+          <div className="flex mt-5">
+            <input
+              className="w-full  border rounded-lg rounded-r-none px-5 py-2"
+              onChange={(evt) => setUserName(evt.currentTarget.value)}
+              id="outlined-basic"
+              placeholder="enter username to search through social networks"
+            />
+            <button
+              className="border px-3  rounded-r-lg border-l-0"
+              onClick={search}
+              color="primary"
+            >
+              Search
+            </button>
+          </div>
+          <br />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {state.map((v) => (
+              <ReactTinyLink
+                key={v}
+                cardSize="small"
+                showGraphic={true}
+                maxLine={2}
+                minLine={1}
+                url={v}
+              />
+            ))}
+          </div>
+          {state.length === 0 && (
+            <div className="w-full flex justify-center">
+              <img className="mt-20 " src={"/search.svg"} />
+            </div>
+          )}
+        </div>
       </main>
-    </div>
-  );
+    </>
+  ) : (
+      <div />
+    );
 }
